@@ -2,9 +2,11 @@ import { useLanguage } from '../context/LanguageContext';
 
 type SettingsProps = {
   onOpenStoreMemory: () => void;
+  onOpenFeedback: () => void;
+  onOpenBackup: () => void;
 };
 
-export function Settings({ onOpenStoreMemory }: SettingsProps) {
+export function Settings({ onOpenStoreMemory, onOpenFeedback, onOpenBackup }: SettingsProps) {
   const { language, setLanguage, t } = useLanguage();
 
   return (
@@ -35,13 +37,29 @@ export function Settings({ onOpenStoreMemory }: SettingsProps) {
         </div>
       </section>
 
-      <button
-        className="w-full rounded-[2rem] bg-white p-5 text-left text-base font-bold text-gray-950 shadow-sm ring-1 ring-gray-100"
-        type="button"
-        onClick={onOpenStoreMemory}
-      >
-        {t.storeMemory.entry}
-      </button>
+      <div className="space-y-3">
+        <button
+          className="w-full rounded-[2rem] bg-white p-5 text-left text-base font-bold text-gray-950 shadow-sm ring-1 ring-gray-100"
+          type="button"
+          onClick={onOpenStoreMemory}
+        >
+          {t.storeMemory.entry}
+        </button>
+        <button
+          className="w-full rounded-[2rem] bg-white p-5 text-left text-base font-bold text-gray-950 shadow-sm ring-1 ring-gray-100"
+          type="button"
+          onClick={onOpenFeedback}
+        >
+          {t.feedback.entry}
+        </button>
+        <button
+          className="w-full rounded-[2rem] bg-white p-5 text-left text-base font-bold text-gray-950 shadow-sm ring-1 ring-gray-100"
+          type="button"
+          onClick={onOpenBackup}
+        >
+          {t.backup.entry}
+        </button>
+      </div>
 
       <p className="rounded-3xl bg-white p-5 text-sm leading-6 text-gray-500 shadow-sm ring-1 ring-gray-100">
         {t.settings.storageNote}

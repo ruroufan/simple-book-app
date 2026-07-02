@@ -94,6 +94,43 @@ type Translation = {
     lastUsedAt: string;
     delete: string;
   };
+  feedback: {
+    title: string;
+    entry: string;
+    type: string;
+    message: string;
+    messagePlaceholder: string;
+    contact: string;
+    contactPlaceholder: string;
+    submit: string;
+    submitting: string;
+    success: string;
+    failure: string;
+    mailApp: string;
+    copy: string;
+    copied: string;
+    options: {
+      bug: string;
+      receipt: string;
+      dataLoss: string;
+      suggestion: string;
+      other: string;
+    };
+  };
+  backup: {
+    title: string;
+    entry: string;
+    sectionTitle: string;
+    exportData: string;
+    importData: string;
+    restoreLocal: string;
+    noLocalBackup: string;
+    importConfirm: string;
+    restored: string;
+    exported: string;
+    invalidFile: string;
+    note: string;
+  };
   settings: {
     title: string;
     language: string;
@@ -128,7 +165,7 @@ export const paymentMethodKeys: PaymentMethod[] = ['cash', 'creditCard', 'electr
 
 export const translations: Record<Language, Translation> = {
   zh: {
-    appName: '极简记账',
+    appName: '简单记账',
     nav: {
       dashboard: '首页',
       list: '记账',
@@ -239,12 +276,49 @@ export const translations: Record<Language, Translation> = {
       lastUsedAt: '最后使用',
       delete: '删除',
     },
+    feedback: {
+      title: '问题反馈',
+      entry: '问题反馈',
+      type: '问题类型',
+      message: '问题说明',
+      messagePlaceholder: '请描述遇到的问题、所在页面、操作步骤和当时情况。',
+      contact: '联系方式（选填）',
+      contactPlaceholder: '邮箱或其他联系方式',
+      submit: '提交反馈',
+      submitting: '正在发送...',
+      success: '已收到反馈，谢谢！',
+      failure: '反馈发送失败，请稍后再试，或复制内容发送给开发者。',
+      mailApp: '用邮件 App 发送',
+      copy: '复制反馈内容',
+      copied: '已复制',
+      options: {
+        bug: 'Bug 报错',
+        receipt: '小票识别不准确',
+        dataLoss: '数据丢失',
+        suggestion: '功能建议',
+        other: '其他',
+      },
+    },
+    backup: {
+      title: '数据备份与恢复',
+      entry: '数据备份与恢复',
+      sectionTitle: '本地数据',
+      exportData: '导出数据',
+      importData: '导入数据',
+      restoreLocal: '从本机备份恢复',
+      noLocalBackup: '暂无本机备份',
+      importConfirm: '导入数据会覆盖当前本机数据，确定继续吗？',
+      restored: '数据已恢复',
+      exported: '已导出备份文件',
+      invalidFile: '备份文件无法读取',
+      note: '数据保存在当前浏览器本地。删除浏览器数据、卸载 PWA 或清除 Safari 网站数据可能会丢失记录，建议定期导出备份。',
+    },
     settings: {
       title: '设置',
       language: '语言',
       chinese: '中文',
       japanese: '日本語',
-      storageNote: '记录、小票图片、日程和店铺记忆只保存在当前浏览器本地。',
+      storageNote: '记录、小票图片、日程和店铺记忆会保存在本机。建议定期导出备份。',
     },
     install: {
       addToHome: '添加到手机桌面',
@@ -368,12 +442,49 @@ export const translations: Record<Language, Translation> = {
       lastUsedAt: '最終使用',
       delete: '削除',
     },
+    feedback: {
+      title: '不具合報告',
+      entry: '不具合報告',
+      type: '種類',
+      message: '内容',
+      messagePlaceholder: '問題、画面、操作、発生した状況を入力してください。',
+      contact: '連絡先（任意）',
+      contactPlaceholder: 'メールアドレスなど',
+      submit: '送信する',
+      submitting: '送信中...',
+      success: 'ご報告ありがとうございます。',
+      failure: '送信に失敗しました。あとでもう一度試すか、内容をコピーして開発者に送ってください。',
+      mailApp: 'メールアプリで送信',
+      copy: '内容をコピー',
+      copied: 'コピーしました',
+      options: {
+        bug: '不具合',
+        receipt: 'レシート認識が不正確',
+        dataLoss: 'データが消えた',
+        suggestion: '機能要望',
+        other: 'その他',
+      },
+    },
+    backup: {
+      title: 'データのバックアップと復元',
+      entry: 'データのバックアップと復元',
+      sectionTitle: '端末内データ',
+      exportData: 'データを書き出す',
+      importData: 'データを読み込む',
+      restoreLocal: '端末内バックアップから復元',
+      noLocalBackup: '端末内バックアップはありません',
+      importConfirm: '読み込むと現在の端末内データが上書きされます。続行しますか？',
+      restored: 'データを復元しました',
+      exported: 'バックアップを書き出しました',
+      invalidFile: 'バックアップファイルを読み込めません',
+      note: 'データはこのブラウザ内に保存されます。ブラウザデータの削除、PWA の削除、Safari の Web サイトデータ削除で記録が消える場合があります。定期的な書き出しをおすすめします。',
+    },
     settings: {
       title: '設定',
       language: '言語',
       chinese: '中文',
       japanese: '日本語',
-      storageNote: '記録、画像、予定、店舗記憶はこのブラウザ内にのみ保存されます。',
+      storageNote: '記録、画像、予定、店舗記憶は端末内に保存されます。定期的なバックアップをおすすめします。',
     },
     install: {
       addToHome: 'ホーム画面に追加',

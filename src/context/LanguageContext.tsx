@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { translations } from '../i18n/translations';
 import type { Language } from '../types';
+import { writeLatestBackup } from '../services/backup';
+import { setPersistentData } from '../services/persistentStorage';
 
 const LANGUAGE_KEY = 'minimal-expense-language';
 
@@ -19,6 +21,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     localStorage.setItem(LANGUAGE_KEY, language);
+    void setPersistentData('language', language);
+    writeLatestBackup();
     document.documentElement.lang = language === 'zh' ? 'zh' : 'ja';
   }, [language]);
 

@@ -48,5 +48,7 @@ export type Page =
   | 'scheduleAdd'
   | 'scheduleDetail'
   | 'storeMemory'
+  | 'feedback'
+  | 'backup'
   | 'stats'
   | 'settings';

@@ -1,5 +1,7 @@
 import type { ExpenseCategory } from '../types';
 import type { CategorySuggestion, StoreCategoryMemory } from '../types/storeMemory';
+import { writeLatestBackup } from './backup';
+import { setPersistentData } from './persistentStorage';
 
 const STORE_MEMORY_KEY = 'minimal-expense-store-category-memory';
 
@@ -47,6 +49,8 @@ export function getStoreCategoryMemories(): StoreCategoryMemory[] {
 
 export function saveStoreCategoryMemories(memories: StoreCategoryMemory[]) {
   localStorage.setItem(STORE_MEMORY_KEY, JSON.stringify(memories));
+  void setPersistentData('storeMemories', memories);
+  writeLatestBackup();
 }
 
 export function upsertStoreCategoryMemory(storeName: string | undefined, category: ExpenseCategory) {

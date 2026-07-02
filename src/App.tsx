@@ -12,10 +12,13 @@ import {
   updateStoreCategoryMemory,
   upsertStoreCategoryMemory,
 } from './services/storeCategoryMemory';
+import { initializePersistentStorage } from './services/persistentStorage';
 import { AddExpense } from './pages/AddExpense';
+import { BackupPage } from './pages/BackupPage';
 import { Dashboard } from './pages/Dashboard';
 import { ExpenseDetail } from './pages/ExpenseDetail';
 import { ExpenseList } from './pages/ExpenseList';
+import { FeedbackPage } from './pages/FeedbackPage';
 import { ScheduleDetail } from './pages/ScheduleDetail';
 import { SchedulePage } from './pages/SchedulePage';
 import { Settings } from './pages/Settings';
@@ -40,6 +43,12 @@ function AppShell() {
     setExpenses(getExpenses());
     setSchedules(getSchedules());
     setStoreMemories(getStoreCategoryMemories());
+
+    void initializePersistentStorage().then(() => {
+      setExpenses(getExpenses());
+      setSchedules(getSchedules());
+      setStoreMemories(getStoreCategoryMemories());
+    });
   }, []);
 
   function navigateTo(nextPage: Page) {
@@ -146,6 +155,12 @@ function AppShell() {
     setStoreMemories(deleteStoreCategoryMemory(memoryId));
   }
 
+  function refreshLocalData() {
+    setExpenses(getExpenses());
+    setSchedules(getSchedules());
+    setStoreMemories(getStoreCategoryMemories());
+  }
+
   const selectedExpense = expenses.find((expense) => expense.id === selectedExpenseId);
   const selectedSchedule = schedules.find((schedule) => schedule.id === selectedScheduleId);
 
@@ -204,8 +219,16 @@ function AppShell() {
         onUpdate={handleUpdateMemory}
       />
     ),
+    feedback: <FeedbackPage onBack={safeBack} />,
+    backup: <BackupPage onBack={safeBack} onRestored={refreshLocalData} />,
     stats: <Stats expenses={expenses} />,
-    settings: <Settings onOpenStoreMemory={() => navigateTo('storeMemory')} />,
+    settings: (
+      <Settings
+        onOpenBackup={() => navigateTo('backup')}
+        onOpenFeedback={() => navigateTo('feedback')}
+        onOpenStoreMemory={() => navigateTo('storeMemory')}
+      />
+    ),
   }[page];
 
   const showBottomNav =
