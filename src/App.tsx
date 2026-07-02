@@ -3,6 +3,7 @@ import { BottomNav } from './components/BottomNav';
 import { InstallPrompt } from './components/InstallPrompt';
 import { ScheduleForm } from './components/ScheduleForm';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
+import { useSwipeBack } from './hooks/useSwipeBack';
 import { addExpense, deleteExpense, getExpenses, updateExpense } from './services/storage';
 import { addSchedule, deleteSchedule, getSchedules, updateSchedule } from './services/scheduleStorage';
 import {
@@ -33,12 +34,45 @@ function AppShell() {
   const [selectedExpenseId, setSelectedExpenseId] = useState<string | null>(null);
   const [selectedScheduleId, setSelectedScheduleId] = useState<string | null>(null);
   const [scheduleFormDate, setScheduleFormDate] = useState<string | undefined>();
+  const [pageStack, setPageStack] = useState<Page[]>([]);
 
   useEffect(() => {
     setExpenses(getExpenses());
     setSchedules(getSchedules());
     setStoreMemories(getStoreCategoryMemories());
   }, []);
+
+  function navigateTo(nextPage: Page) {
+    setPageStack((stack) => (nextPage === page ? stack : [...stack, page]));
+    setPage(nextPage);
+  }
+
+  function safeBack() {
+    if (page === 'dashboard') {
+      return;
+    }
+
+    const previousPage = pageStack[pageStack.length - 1];
+    if (previousPage) {
+      setPageStack((stack) => stack.slice(0, -1));
+      setPage(previousPage);
+      return;
+    }
+
+    if (window.history.length > 1) {
+      window.history.back();
+      return;
+    }
+
+    setPage('dashboard');
+  }
+
+  useSwipeBack({
+    enabled: page !== 'dashboard',
+    edgeWidth: 40,
+    threshold: 70,
+    onBack: safeBack,
+  });
 
   function learnStoreCategory(expense: Expense) {
     if (expense.storeName) {
@@ -50,7 +84,7 @@ function AppShell() {
     const nextExpenses = addExpense(expense);
     learnStoreCategory(expense);
     setExpenses(nextExpenses);
-    setPage('dashboard');
+    navigateTo('dashboard');
   }
 
   function handleUpdateExpense(expense: Expense) {
@@ -58,50 +92,50 @@ function AppShell() {
     learnStoreCategory(expense);
     setExpenses(nextExpenses);
     setSelectedExpenseId(expense.id);
-    setPage('detail');
+    navigateTo('detail');
   }
 
   function handleDeleteExpense(expenseId: string) {
     const nextExpenses = deleteExpense(expenseId);
     setExpenses(nextExpenses);
     setSelectedExpenseId(null);
-    setPage('list');
+    navigateTo('list');
   }
 
   function openExpenseDetail(expenseId: string) {
     setSelectedExpenseId(expenseId);
-    setPage('detail');
+    navigateTo('detail');
   }
 
   function handleSaveSchedule(schedule: Schedule) {
     const nextSchedules = addSchedule(schedule);
     setSchedules(nextSchedules);
     setSelectedScheduleId(schedule.id);
-    setPage('scheduleDetail');
+    navigateTo('scheduleDetail');
   }
 
   function handleUpdateSchedule(schedule: Schedule) {
     const nextSchedules = updateSchedule(schedule);
     setSchedules(nextSchedules);
     setSelectedScheduleId(schedule.id);
-    setPage('scheduleDetail');
+    navigateTo('scheduleDetail');
   }
 
   function handleDeleteSchedule(scheduleId: string) {
     const nextSchedules = deleteSchedule(scheduleId);
     setSchedules(nextSchedules);
     setSelectedScheduleId(null);
-    setPage('schedule');
+    navigateTo('schedule');
   }
 
   function openScheduleAdd(date: string) {
     setScheduleFormDate(date);
-    setPage('scheduleAdd');
+    navigateTo('scheduleAdd');
   }
 
   function openScheduleDetail(scheduleId: string) {
     setSelectedScheduleId(scheduleId);
-    setPage('scheduleDetail');
+    navigateTo('scheduleDetail');
   }
 
   function handleUpdateMemory(memoryId: string, category: ExpenseCategory) {
@@ -116,13 +150,13 @@ function AppShell() {
   const selectedSchedule = schedules.find((schedule) => schedule.id === selectedScheduleId);
 
   const pageContent = {
-    dashboard: <Dashboard expenses={expenses} onAdd={() => setPage('add')} />,
-    add: <AddExpense onCancel={() => setPage('dashboard')} onSave={handleSaveExpense} />,
+    dashboard: <Dashboard expenses={expenses} onAdd={() => navigateTo('add')} />,
+    add: <AddExpense onCancel={safeBack} onSave={handleSaveExpense} />,
     list: <ExpenseList expenses={expenses} onSelectExpense={openExpenseDetail} />,
     detail: selectedExpense ? (
       <ExpenseDetail
         expense={selectedExpense}
-        onBack={() => setPage('list')}
+        onBack={safeBack}
         onDelete={handleDeleteExpense}
         onUpdate={handleUpdateExpense}
       />
@@ -142,14 +176,14 @@ function AppShell() {
       <ScheduleForm
         initialDate={scheduleFormDate}
         mode="create"
-        onCancel={() => setPage('schedule')}
+        onCancel={safeBack}
         onSave={handleSaveSchedule}
       />
     ),
     scheduleDetail: selectedSchedule ? (
       <ScheduleDetail
         schedule={selectedSchedule}
-        onBack={() => setPage('schedule')}
+        onBack={safeBack}
         onDelete={handleDeleteSchedule}
         onUpdate={handleUpdateSchedule}
       />
@@ -165,13 +199,13 @@ function AppShell() {
     storeMemory: (
       <StoreMemoryPage
         memories={storeMemories}
-        onBack={() => setPage('settings')}
+        onBack={safeBack}
         onDelete={handleDeleteMemory}
         onUpdate={handleUpdateMemory}
       />
     ),
     stats: <Stats expenses={expenses} />,
-    settings: <Settings onOpenStoreMemory={() => setPage('storeMemory')} />,
+    settings: <Settings onOpenStoreMemory={() => navigateTo('storeMemory')} />,
   }[page];
 
   const showBottomNav =
@@ -190,7 +224,7 @@ function AppShell() {
         {showBottomNav ? (
           <div className="absolute bottom-0 left-0 right-0">
             <InstallPrompt />
-            <BottomNav currentPage={page} onNavigate={setPage} />
+            <BottomNav currentPage={page} onNavigate={navigateTo} />
           </div>
         ) : null}
       </main>
