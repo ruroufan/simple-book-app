@@ -14,7 +14,7 @@ export function BottomNav({ currentPage, onNavigate }: BottomNavProps) {
   const { t } = useLanguage();
 
   return (
-    <nav className="border-t border-gray-200 bg-white/95 px-2 pb-3 pt-2 backdrop-blur">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 mx-auto w-full max-w-[430px] border-t border-gray-200 bg-white/95 px-2 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-2 backdrop-blur-xl">
       <div className="grid grid-cols-5 gap-1">
         {navPages.map((page) => {
           const isActive = currentPage === page;

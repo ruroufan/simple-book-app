@@ -212,22 +212,26 @@ function AppShell() {
     page === 'dashboard' || page === 'list' || page === 'schedule' || page === 'stats' || page === 'settings';
 
   return (
-    <div className="min-h-screen bg-gray-200 px-3 py-4 text-gray-950">
-      <main className="relative mx-auto flex h-[calc(100vh-2rem)] max-h-[920px] min-h-[680px] w-full max-w-[430px] flex-col overflow-hidden rounded-[2.5rem] bg-gray-50 shadow-2xl ring-1 ring-black/5">
-        <div className="flex items-center justify-between px-6 pb-3 pt-6">
+    <div className="app-shell text-gray-950">
+      <main className="app-frame shadow-2xl ring-1 ring-black/5 sm:my-4 sm:h-[calc(100dvh-2rem)] sm:rounded-[2.5rem]">
+        <div className="app-header flex items-center justify-between px-6 pb-3">
           <p className="text-sm font-bold text-gray-950">{t.appName}</p>
           <div className="h-1.5 w-16 rounded-full bg-gray-200" />
         </div>
 
-        <div className="flex-1 overflow-y-auto px-5 pb-28 pt-2">{pageContent}</div>
-
-        {showBottomNav ? (
-          <div className="absolute bottom-0 left-0 right-0">
-            <InstallPrompt />
-            <BottomNav currentPage={page} onNavigate={navigateTo} />
-          </div>
-        ) : null}
+        <div className={`app-content px-5 pt-2 ${showBottomNav ? 'app-content-with-nav' : 'app-content-no-nav'}`}>
+          {pageContent}
+        </div>
       </main>
+
+      {showBottomNav ? (
+        <>
+          <div className="fixed bottom-[calc(68px+env(safe-area-inset-bottom))] left-0 right-0 z-40 mx-auto w-full max-w-[430px]">
+            <InstallPrompt />
+          </div>
+          <BottomNav currentPage={page} onNavigate={navigateTo} />
+        </>
+      ) : null}
     </div>
   );
 }

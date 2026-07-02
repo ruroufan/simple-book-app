@@ -12,7 +12,7 @@ export default defineConfig({
         name: '简单记账',
         short_name: 'SimpleBook',
         description: '中日双语极简记账与日程 App',
-        theme_color: '#ffffff',
+        theme_color: '#f5f5f7',
         background_color: '#f5f5f7',
         display: 'standalone',
         orientation: 'portrait',
