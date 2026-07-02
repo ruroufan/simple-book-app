@@ -7,7 +7,7 @@ type SettingsProps = {
 };
 
 export function Settings({ onOpenStoreMemory, onOpenFeedback, onOpenBackup }: SettingsProps) {
-  const { language, setLanguage, t } = useLanguage();
+  const { language, resetLanguagePreference, setLanguage, t } = useLanguage();
 
   return (
     <div className="space-y-5">
@@ -35,6 +35,13 @@ export function Settings({ onOpenStoreMemory, onOpenFeedback, onOpenBackup }: Se
             {t.settings.japanese}
           </button>
         </div>
+        <button
+          className="mt-3 w-full rounded-2xl bg-gray-100 px-4 py-3 text-sm font-bold text-gray-700"
+          type="button"
+          onClick={resetLanguagePreference}
+        >
+          {t.settings.followSystem}
+        </button>
       </section>
 
       <div className="space-y-3">

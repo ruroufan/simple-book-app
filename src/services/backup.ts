@@ -9,7 +9,8 @@ export const BACKUP_KEY = 'simplebook_backup_latest';
 const EXPENSES_KEY = 'minimal-expense-records';
 const SCHEDULES_KEY = 'minimal-expense-schedules';
 const STORE_MEMORY_KEY = 'minimal-expense-store-category-memory';
-const LANGUAGE_KEY = 'minimal-expense-language';
+const LANGUAGE_KEY = 'simplebook_language';
+const LEGACY_LANGUAGE_KEY = 'minimal-expense-language';
 
 export type BackupData = {
   version: string;
@@ -32,7 +33,7 @@ export function createBackupData(): BackupData {
     schedules: readJson<Schedule[]>(SCHEDULES_KEY, []),
     storeMemories: readJson<StoreCategoryMemory[]>(STORE_MEMORY_KEY, []),
     settings: {
-      language: localStorage.getItem(LANGUAGE_KEY) === 'ja' ? 'ja' : 'zh',
+      language: getStoredLanguage(),
     },
   };
 }
@@ -77,6 +78,7 @@ export function restoreBackup(backup: BackupData) {
   localStorage.setItem(SCHEDULES_KEY, JSON.stringify(backup.schedules));
   localStorage.setItem(STORE_MEMORY_KEY, JSON.stringify(backup.storeMemories));
   localStorage.setItem(LANGUAGE_KEY, backup.settings.language);
+  localStorage.setItem(LEGACY_LANGUAGE_KEY, backup.settings.language);
   localStorage.setItem(BACKUP_KEY, JSON.stringify(backup));
 
   void setPersistentData('expenses', backup.expenses);
@@ -84,6 +86,11 @@ export function restoreBackup(backup: BackupData) {
   void setPersistentData('storeMemories', backup.storeMemories);
   void setPersistentData('language', backup.settings.language);
   void setPersistentData('latestBackup', backup);
+}
+
+function getStoredLanguage(): Language {
+  const savedLanguage = localStorage.getItem(LANGUAGE_KEY) ?? localStorage.getItem(LEGACY_LANGUAGE_KEY);
+  return savedLanguage === 'ja' ? 'ja' : 'zh';
 }
 
 function parseBackup(raw: string): BackupData | null {

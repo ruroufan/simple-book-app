@@ -136,6 +136,7 @@ type Translation = {
     language: string;
     chinese: string;
     japanese: string;
+    followSystem: string;
     storageNote: string;
   };
   install: {
@@ -318,6 +319,7 @@ export const translations: Record<Language, Translation> = {
       language: '语言',
       chinese: '中文',
       japanese: '日本語',
+      followSystem: '跟随手机语言',
       storageNote: '记录、小票图片、日程和店铺记忆会保存在本机。建议定期导出备份。',
     },
     install: {
@@ -484,6 +486,7 @@ export const translations: Record<Language, Translation> = {
       language: '言語',
       chinese: '中文',
       japanese: '日本語',
+      followSystem: '端末の言語に合わせる',
       storageNote: '記録、画像、予定、店舗記憶は端末内に保存されます。定期的なバックアップをおすすめします。',
     },
     install: {

@@ -9,8 +9,10 @@ const legacyKeys: Record<Exclude<PersistentKey, 'latestBackup'>, string> = {
   expenses: 'minimal-expense-records',
   schedules: 'minimal-expense-schedules',
   storeMemories: 'minimal-expense-store-category-memory',
-  language: 'minimal-expense-language',
+  language: 'simplebook_language',
 };
+
+const fallbackLanguageKey = 'minimal-expense-language';
 
 function openDatabase(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -62,6 +64,24 @@ export async function setPersistentData<T>(key: PersistentKey, value: T): Promis
   });
 }
 
+export async function removePersistentData(key: PersistentKey): Promise<void> {
+  if (!('indexedDB' in window)) {
+    return;
+  }
+
+  const db = await openDatabase();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORE_NAME, 'readwrite');
+    const request = transaction.objectStore(STORE_NAME).delete(key);
+
+    request.onerror = () => reject(request.error);
+    transaction.oncomplete = () => {
+      db.close();
+      resolve();
+    };
+  });
+}
+
 export async function initializePersistentStorage(): Promise<void> {
   if (!('indexedDB' in window)) {
     return;
@@ -75,7 +95,10 @@ export async function initializePersistentStorage(): Promise<void> {
 
   await Promise.all(
     Object.entries(legacyKeys).map(async ([persistentKey, localStorageKey]) => {
-      const raw = localStorage.getItem(localStorageKey);
+      const raw =
+        persistentKey === 'language'
+          ? localStorage.getItem(localStorageKey) ?? localStorage.getItem(fallbackLanguageKey)
+          : localStorage.getItem(localStorageKey);
       if (!raw) {
         return;
       }
