@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { downloadBackup, getLatestBackup, readBackupFile, restoreBackup } from '../services/backup';
+import { requestCloudSync } from '../services/cloudSync';
 
 type BackupPageProps = {
   onBack: () => void;
@@ -32,6 +33,7 @@ export function BackupPage({ onBack, onRestored }: BackupPageProps) {
       restoreBackup(backup);
       setStatus(t.backup.restored);
       onRestored();
+      requestCloudSync();
     } catch {
       setStatus(t.backup.invalidFile);
     } finally {
@@ -50,6 +52,7 @@ export function BackupPage({ onBack, onRestored }: BackupPageProps) {
     restoreBackup(backup);
     setStatus(t.backup.restored);
     onRestored();
+    requestCloudSync();
   }
 
   return (

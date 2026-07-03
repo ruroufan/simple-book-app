@@ -1,12 +1,14 @@
+import { CloudSyncSection } from '../components/CloudSyncSection';
 import { useLanguage } from '../context/LanguageContext';
 
 type SettingsProps = {
   onOpenStoreMemory: () => void;
   onOpenFeedback: () => void;
   onOpenBackup: () => void;
+  onCloudRestored: () => void;
 };
 
-export function Settings({ onOpenStoreMemory, onOpenFeedback, onOpenBackup }: SettingsProps) {
+export function Settings({ onOpenStoreMemory, onOpenFeedback, onOpenBackup, onCloudRestored }: SettingsProps) {
   const { language, resetLanguagePreference, setLanguage, t } = useLanguage();
 
   return (
@@ -43,6 +45,8 @@ export function Settings({ onOpenStoreMemory, onOpenFeedback, onOpenBackup }: Se
           {t.settings.followSystem}
         </button>
       </section>
+
+      <CloudSyncSection onRestored={onCloudRestored} />
 
       <div className="space-y-3">
         <button

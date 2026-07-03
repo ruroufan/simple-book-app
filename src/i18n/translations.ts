@@ -131,6 +131,27 @@ type Translation = {
     invalidFile: string;
     note: string;
   };
+  cloudSync: {
+    title: string;
+    status: string;
+    synced: string;
+    syncing: string;
+    pending: string;
+    failed: string;
+    disabled: string;
+    lastSyncedAt: string;
+    recoveryCode: string;
+    copyRecoveryCode: string;
+    copied: string;
+    syncNow: string;
+    restoreByCode: string;
+    codePlaceholder: string;
+    restoreConfirm: string;
+    restoreSuccess: string;
+    restoreNotFound: string;
+    restoreFailed: string;
+    envNote: string;
+  };
   settings: {
     title: string;
     language: string;
@@ -314,6 +335,27 @@ export const translations: Record<Language, Translation> = {
       invalidFile: '备份文件无法读取',
       note: '数据保存在当前浏览器本地。删除浏览器数据、卸载 PWA 或清除 Safari 网站数据可能会丢失记录，建议定期导出备份。',
     },
+    cloudSync: {
+      title: '云端同步',
+      status: '同步状态',
+      synced: '已同步',
+      syncing: '同步中',
+      pending: '等待同步',
+      failed: '同步失败',
+      disabled: '未配置云端同步',
+      lastSyncedAt: '最后同步时间',
+      recoveryCode: '我的恢复码',
+      copyRecoveryCode: '复制恢复码',
+      copied: '已复制',
+      syncNow: '立即同步',
+      restoreByCode: '通过恢复码恢复数据',
+      codePlaceholder: '输入恢复码，例如 SB-8K29-XP73',
+      restoreConfirm: '找到云端数据。恢复后会覆盖当前本机数据，确定继续吗？',
+      restoreSuccess: '云端数据已恢复',
+      restoreNotFound: '没有找到对应数据，请确认恢复码是否正确。',
+      restoreFailed: '恢复失败，请稍后再试。',
+      envNote: '配置 Supabase 环境变量后会自动同步。',
+    },
     settings: {
       title: '设置',
       language: '语言',
@@ -480,6 +522,27 @@ export const translations: Record<Language, Translation> = {
       exported: 'バックアップを書き出しました',
       invalidFile: 'バックアップファイルを読み込めません',
       note: 'データはこのブラウザ内に保存されます。ブラウザデータの削除、PWA の削除、Safari の Web サイトデータ削除で記録が消える場合があります。定期的な書き出しをおすすめします。',
+    },
+    cloudSync: {
+      title: 'クラウド同期',
+      status: '同期状態',
+      synced: '同期済み',
+      syncing: '同期中',
+      pending: '同期待ち',
+      failed: '同期に失敗しました',
+      disabled: 'クラウド同期は未設定です',
+      lastSyncedAt: '最終同期時刻',
+      recoveryCode: '復元コード',
+      copyRecoveryCode: '復元コードをコピー',
+      copied: 'コピーしました',
+      syncNow: '今すぐ同期',
+      restoreByCode: '復元コードでデータを復元',
+      codePlaceholder: '復元コードを入力（例：SB-8K29-XP73）',
+      restoreConfirm: 'クラウドデータが見つかりました。復元すると現在の端末内データが上書きされます。続行しますか？',
+      restoreSuccess: 'クラウドデータを復元しました',
+      restoreNotFound: '該当するデータが見つかりません。復元コードを確認してください。',
+      restoreFailed: '復元に失敗しました。あとでもう一度試してください。',
+      envNote: 'Supabase の環境変数を設定すると自動同期されます。',
     },
     settings: {
       title: '設定',

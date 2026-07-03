@@ -12,6 +12,7 @@ import {
   updateStoreCategoryMemory,
   upsertStoreCategoryMemory,
 } from './services/storeCategoryMemory';
+import { autoSync } from './services/cloudSync';
 import { initializePersistentStorage } from './services/persistentStorage';
 import { AddExpense } from './pages/AddExpense';
 import { BackupPage } from './pages/BackupPage';
@@ -48,6 +49,7 @@ function AppShell() {
       setExpenses(getExpenses());
       setSchedules(getSchedules());
       setStoreMemories(getStoreCategoryMemories());
+      void autoSync().then(refreshLocalData).catch(() => undefined);
     });
   }, []);
 
@@ -224,6 +226,7 @@ function AppShell() {
     stats: <Stats expenses={expenses} />,
     settings: (
       <Settings
+        onCloudRestored={refreshLocalData}
         onOpenBackup={() => navigateTo('backup')}
         onOpenFeedback={() => navigateTo('feedback')}
         onOpenStoreMemory={() => navigateTo('storeMemory')}

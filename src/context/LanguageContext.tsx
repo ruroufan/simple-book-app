@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 import { translations } from '../i18n/translations';
 import type { Language } from '../types';
 import { writeLatestBackup } from '../services/backup';
+import { requestCloudSync } from '../services/cloudSync';
 import { removePersistentData, setPersistentData } from '../services/persistentStorage';
 
 const LANGUAGE_KEY = 'simplebook_language';
@@ -26,8 +27,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   function setLanguage(language: Language) {
     localStorage.setItem(LANGUAGE_KEY, language);
     localStorage.setItem(LEGACY_LANGUAGE_KEY, language);
-    void setPersistentData('language', language);
+    void setPersistentData('language', language).catch(() => undefined);
     writeLatestBackup();
+    requestCloudSync();
     setLanguageState(language);
   }
 
@@ -35,7 +37,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const nextLanguage = detectBrowserLanguage();
     localStorage.removeItem(LANGUAGE_KEY);
     localStorage.removeItem(LEGACY_LANGUAGE_KEY);
-    void removePersistentData('language');
+    void removePersistentData('language').catch(() => undefined);
+    requestCloudSync();
     setLanguageState(nextLanguage);
   }
 

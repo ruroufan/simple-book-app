@@ -1,5 +1,6 @@
 import type { Expense } from '../types';
 import { writeLatestBackup } from './backup';
+import { requestCloudSync } from './cloudSync';
 import { setPersistentData } from './persistentStorage';
 
 const EXPENSES_KEY = 'minimal-expense-records';
@@ -20,8 +21,9 @@ export function getExpenses(): Expense[] {
 
 export function saveExpenses(expenses: Expense[]) {
   localStorage.setItem(EXPENSES_KEY, JSON.stringify(expenses));
-  void setPersistentData('expenses', expenses);
+  void setPersistentData('expenses', expenses).catch(() => undefined);
   writeLatestBackup();
+  requestCloudSync();
 }
 
 export function addExpense(expense: Expense) {

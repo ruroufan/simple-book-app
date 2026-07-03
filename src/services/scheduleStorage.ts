@@ -1,5 +1,6 @@
 import type { Schedule } from '../types/schedule';
 import { writeLatestBackup } from './backup';
+import { requestCloudSync } from './cloudSync';
 import { setPersistentData } from './persistentStorage';
 
 const SCHEDULES_KEY = 'minimal-expense-schedules';
@@ -20,8 +21,9 @@ export function getSchedules(): Schedule[] {
 
 export function saveSchedules(schedules: Schedule[]) {
   localStorage.setItem(SCHEDULES_KEY, JSON.stringify(schedules));
-  void setPersistentData('schedules', schedules);
+  void setPersistentData('schedules', schedules).catch(() => undefined);
   writeLatestBackup();
+  requestCloudSync();
 }
 
 export function addSchedule(schedule: Schedule) {
